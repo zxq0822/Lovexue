@@ -28,6 +28,8 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
 
+  const [errorMsg, setErrorMsg] = useState('');
+
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('qing_auth') === 'true') {
       setIsAuthenticated(true);
@@ -40,13 +42,16 @@ export default function AdminPage() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === 'qing') {
+  const handleLogin = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setErrorMsg('');
+
+    // 适配手机端输入法可能自带的大写和空格
+    if (password.trim().toLowerCase() === 'qing') {
       setIsAuthenticated(true);
       localStorage.setItem('qing_auth', 'true');
     } else {
-      alert('密码错误');
+      setErrorMsg('密码错误，请重新输入');
     }
   };
 
@@ -180,6 +185,10 @@ export default function AdminPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-gray-200 px-4 py-3.5 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-white transition-all"
               autoFocus
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="none"
+              spellCheck={false}
             />
             <button
               type="submit"
@@ -187,6 +196,11 @@ export default function AdminPage() {
             >
               登录系统
             </button>
+            {errorMsg && (
+              <p className="text-center text-sm font-medium text-red-500 mt-2 animate-bounce">
+                {errorMsg}
+              </p>
+            )}
           </div>
           <div className="text-center pt-2">
             <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
