@@ -200,28 +200,37 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col md:flex-row">
-      {/* 侧边栏 */}
-      <aside className="w-full md:w-64 bg-white dark:bg-zinc-900 border-r border-gray-200 dark:border-zinc-800 p-6 flex flex-col">
-        <h1 className="text-2xl font-bold mb-8 tracking-tight">Qing 控制台</h1>
+      {/* 侧边栏 (移动端横向导航 / 桌面端侧边栏) */}
+      <aside className="w-full md:w-64 bg-white dark:bg-zinc-900 border-b md:border-b-0 md:border-r border-gray-200 dark:border-zinc-800 p-4 md:p-6 flex flex-col md:min-h-screen md:sticky md:top-0 z-10">
+        <div className="flex justify-between items-center mb-4 md:mb-8">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight">Qing 控制台</h1>
+          <button
+            onClick={handleLogout}
+            className="md:hidden text-red-500 hover:text-red-700 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg"
+            aria-label="退出登录"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
 
-        <nav className="flex-grow space-y-2">
+        <nav className="flex md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide snap-x">
           <button
             onClick={() => setActiveTab('photos')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'photos' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400' : 'hover:bg-gray-100 dark:hover:bg-zinc-800'}`}
+            className={`flex-shrink-0 md:w-full flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 rounded-lg transition-colors font-medium text-sm md:text-base snap-start ${activeTab === 'photos' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400' : 'bg-gray-100/50 hover:bg-gray-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800'}`}
           >
-            <Camera className="w-5 h-5" />
-            照片管理
+            <Camera className="w-4 h-4 md:w-5 md:h-5" />
+            照片列表
           </button>
           <button
             onClick={() => setActiveTab('videos')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'videos' ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400' : 'hover:bg-gray-100 dark:hover:bg-zinc-800'}`}
+            className={`flex-shrink-0 md:w-full flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 rounded-lg transition-colors font-medium text-sm md:text-base snap-start ${activeTab === 'videos' ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400' : 'bg-gray-100/50 hover:bg-gray-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800'}`}
           >
-            <Video className="w-5 h-5" />
+            <Video className="w-4 h-4 md:w-5 md:h-5" />
             轮播视频管理
           </button>
         </nav>
 
-        <div className="mt-auto pt-6 border-t border-gray-200 dark:border-zinc-800 space-y-3">
+        <div className="hidden md:block mt-auto pt-6 border-t border-gray-200 dark:border-zinc-800 space-y-3">
           <Link href="/" className="flex items-center gap-2 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors px-4 py-2">
             <Camera className="w-5 h-5" />
             返回主站首页
@@ -237,21 +246,19 @@ export default function AdminPage() {
       </aside>
 
       {/* 主内容区 */}
-      <main className="flex-1 p-6 md:p-10">
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <main className="flex-1 w-full max-w-[100vw] overflow-hidden p-4 sm:p-6 md:p-10 pb-24 md:pb-10">
+        <header className="flex items-center justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-3xl font-bold">
-              {activeTab === 'photos' ? '照片管理' : '主页轮播视频管理'}
+            <h2 className="text-2xl sm:text-3xl font-bold truncate">
+              {activeTab === 'photos' ? '照片列表' : '主页轮播视频'}
             </h2>
-            <p className="text-zinc-500 mt-1">
-              管理展示在前端主页的数据内容
-            </p>
+            <p className="text-sm mt-1 text-zinc-500 line-clamp-1">管理展示在前端的数据内容</p>
           </div>
 
-          <label className={`cursor-pointer px-5 py-2.5 rounded-lg flex items-center gap-2 transition-transform active:scale-95 shadow-lg text-white ${activeTab === 'photos' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/30' : 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/30'}`}>
-            <UploadCloud className="w-5 h-5" />
-            <span className="font-medium">
-              {uploading ? '正在上传...' : (activeTab === 'photos' ? '上传新照片' : '上传新视频')}
+          <label className={`flex-shrink-0 cursor-pointer px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg flex items-center justify-center gap-1.5 sm:gap-2 text-white transition-all active:scale-95 shadow-md ${activeTab === 'photos' ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20' : 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/20'}`}>
+            <UploadCloud className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="font-medium text-sm sm:text-base whitespace-nowrap">
+              {uploading ? '上传中...' : '上传'}
             </span>
             <input
               type="file"
@@ -268,17 +275,18 @@ export default function AdminPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-zinc-900 dark:border-white"></div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+          <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
             {activeTab === 'photos' ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 p-4 md:p-6">
                 {photos.length === 0 && <div className="col-span-full text-center py-10 text-zinc-500">暂无照片数据</div>}
                 {photos.map(photo => (
-                  <div key={photo.id} className="group relative aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
+                  <div key={photo.id} className="group relative aspect-[3/4] sm:aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
                     <img src={photo.image_url} alt={photo.title || 'Photo'} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <button
                         onClick={() => handleDelete(photo.id, photo.image_url, 'photos')}
-                        className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                        className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg active:scale-90"
+                        aria-label="删除图片"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -290,20 +298,20 @@ export default function AdminPage() {
               <div className="flex flex-col">
                 {videos.length === 0 && <div className="text-center py-16 text-zinc-500">暂无视频数据</div>}
                 {videos.map(vid => (
-                  <div key={vid.id} className="flex items-center gap-6 p-4 border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
-                    <div className="w-48 aspect-video bg-black rounded overflow-hidden flex-shrink-0 relative">
+                  <div key={vid.id} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
+                    <div className="w-32 sm:w-48 aspect-video bg-black rounded overflow-hidden flex-shrink-0 relative">
                       <video src={vid.src} className="w-full h-full object-cover" />
                     </div>
-                    <div className="flex-grow">
-                      <h4 className="font-medium text-lg truncate max-w-sm">{vid.title || '未命名视频'}</h4>
-                      <p className="text-sm text-zinc-500 mt-1">{new Date(vid.created_at).toLocaleString()}</p>
+                    <div className="flex-grow w-full">
+                      <h4 className="font-medium text-base sm:text-lg truncate max-w-[200px] sm:max-w-sm">{vid.title || '未命名视频'}</h4>
+                      <p className="text-xs sm:text-sm text-zinc-500 mt-1">{new Date(vid.created_at).toLocaleString()}</p>
                     </div>
                     <button
                       onClick={() => handleDelete(vid.id, vid.src, 'videos')}
-                      className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-lg transition-colors flex items-center gap-2"
+                      className="self-end sm:self-auto text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 sm:p-3 rounded-lg transition-colors flex items-center gap-1.5"
                     >
-                      <Trash2 className="w-5 h-5" />
-                      <span className="hidden sm:inline">删除视频</span>
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-sm sm:inline">删除</span>
                     </button>
                   </div>
                 ))}
@@ -311,6 +319,14 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {/* 移动端底部返回主页悬浮按钮 */}
+        <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 p-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-20">
+          <Link href="/" className="flex items-center justify-center w-full gap-2 text-zinc-600 dark:text-zinc-300 font-medium py-2 bg-gray-100 dark:bg-zinc-800 rounded-lg active:scale-95 transition-transform">
+            <Camera className="w-5 h-5" />
+            返回主站展示页
+          </Link>
+        </div>
       </main>
     </div>
   );

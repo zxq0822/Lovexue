@@ -99,12 +99,12 @@ export default function Home() {
                   style={{ pointerEvents: 'none' }}
                 />
                 {/* 渐变遮罩与文字 */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-10 md:p-20">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 pb-16 sm:p-10 md:p-20">
                   <div className={`transition-all duration-700 transform ${idx === currentVideoIdx ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                    <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight shadow-sm drop-shadow-md">
+                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-4 tracking-tight shadow-sm drop-shadow-md line-clamp-2">
                       {vid.title}
                     </h2>
-                    <p className="text-zinc-200 text-lg md:text-xl font-light">探索美丽的瞬间与流动的故事</p>
+                    <p className="text-zinc-200 text-base sm:text-lg md:text-xl font-light">探索美丽的瞬间与流动的故事</p>
                   </div>
                 </div>
               </div>
@@ -147,34 +147,40 @@ export default function Home() {
       </section>
 
       {/* 照片瀑布流区域 */}
-      <div className="max-w-7xl mx-auto w-full px-6 py-12 md:py-16 flex-grow">
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 pb-6 border-b border-gray-200 dark:border-zinc-800 gap-4">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-16 flex-grow">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-gray-200 dark:border-zinc-800 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Camera className="w-8 h-8 text-blue-500" />
+            <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2 sm:gap-3">
+              <Camera className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" />
               LoveXue
             </h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">记录我爱杨瑞雪的每一个瞬间</p>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">记录我爱杨瑞雪的每一个瞬间</p>
           </div>
         </header>
 
         {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+          <div className="flex justify-center py-10 sm:py-20">
+            <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-b-2 border-blue-500"></div>
           </div>
         ) : photos.length === 0 ? (
-          <div className="text-center py-20 text-gray-500 dark:text-zinc-400">
-            <p className="text-xl">暂无照片</p>
+          <div className="text-center py-10 sm:py-20 text-gray-500 dark:text-zinc-400">
+            <p className="text-lg sm:text-xl">暂无照片</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
             {photos.map((photo) => (
-              <div key={photo.id} className="group relative aspect-square bg-gray-200 dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+              <div key={photo.id} className="group relative aspect-[3/4] sm:aspect-square bg-gray-200 dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all block">
                 <img
                   src={photo.image_url}
                   alt={photo.title || 'Photo'}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+
+                {/* 增加照片信息悬浮提示（移动端只需点击即可浮现，桌面端悬浮） */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <p className="text-white text-sm font-medium truncate">{photo.title || '未命名照片'}</p>
+                  <p className="text-white/70 text-xs mt-1">{new Date(photo.created_at).toLocaleDateString()}</p>
+                </div>
               </div>
             ))}
           </div>
