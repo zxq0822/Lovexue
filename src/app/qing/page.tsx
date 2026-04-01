@@ -42,8 +42,7 @@ export default function AdminPage() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const handleLogin = () => {
     setErrorMsg('');
 
     // 适配手机端输入法可能自带的大写和空格
@@ -168,7 +167,7 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-zinc-950">
-        <form onSubmit={handleLogin} className="flex flex-col gap-6 rounded-2xl bg-white p-10 shadow-xl dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 w-full max-w-md m-4">
+        <div className="flex flex-col gap-6 rounded-2xl bg-white p-10 shadow-xl dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 w-full max-w-md m-4">
           <div className="text-center space-y-2">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
               Qing 控制台
@@ -183,6 +182,7 @@ export default function AdminPage() {
               placeholder="管理员密码"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               className="w-full rounded-xl border border-gray-200 px-4 py-3.5 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-white transition-all"
               autoFocus
               autoComplete="off"
@@ -191,7 +191,8 @@ export default function AdminPage() {
               spellCheck={false}
             />
             <button
-              type="submit"
+              type="button"
+              onClick={handleLogin}
               className="w-full rounded-xl bg-blue-600 px-4 py-3.5 font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 active:scale-[0.98] transition-all"
             >
               登录系统
@@ -207,7 +208,7 @@ export default function AdminPage() {
               &larr; 返回主页
             </Link>
           </div>
-        </form>
+        </div>
       </div>
     );
   }
